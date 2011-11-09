@@ -30,11 +30,11 @@ function(name) {
 namespace("Seed.Game");
 
 $(document).ready(function() {
-	var startId = 1;
-	var html = new EJS({
-		url : "javascript/templates/" + "quizAnswersUIMarkup.ejs"
-	}).render({
-		quizId : startId
+	var ui = Seed.Game.UI;
+
+	ui.init();
+
+	$("#addAnotherQuiz").click(function() {
+		ui.addQuizAnswerField();
 	});
-	console.log(html);
 });
