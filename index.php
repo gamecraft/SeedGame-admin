@@ -11,6 +11,17 @@ require_once ("class_loader.php");
 		<script src="javascript/api.js"></script>
 		<script src="javascript/plugins/jquery.toastmessage.js"></script>
 		<link href="javascript/plugins/jquery.toastmessage.css" rel="stylesheet" />
+		<script src="javascript/plugins/ejs_production.js"></script>
 	</head>
-	<body></body>
+	<body>
+		
+		<div id="quizContent">
+		</div>
+		<br />
+		<input type="button" value="Add another quiz" id="addAnotherQuiz" />
+		<br />
+		Identification : <input type="text" id="userAutocomplete" />
+		<br />
+		<input type="button" value="Evaluate" id="evaluateButton" />
+	</body>
 </html>
