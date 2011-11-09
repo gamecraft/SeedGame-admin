@@ -31,10 +31,5 @@ namespace("Seed.Game");
 
 $(document).ready(function() {
 	var ui = Seed.Game.UI;
-
 	ui.init();
-
-	$("#addAnotherQuiz").click(function() {
-		ui.addQuizAnswerField();
-	});
 });
