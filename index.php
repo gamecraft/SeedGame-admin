@@ -10,6 +10,7 @@ require_once ("class_loader.php");
 		<script src="javascript/main.js"></script>
 		<script src="javascript/api.js"></script>
 		<script src="javascript/plugins/jquery.toastmessage.js"></script>
+		<link href="javascript/plugins/jquery.toastmessage.css" rel="stylesheet" />
 	</head>
 	<body></body>
 </html>

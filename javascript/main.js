@@ -14,4 +14,5 @@ function(name) {
 namespace("Seed.Game");
 
 $(document).ready(function() {
+	
 });
