@@ -1,4 +1,5 @@
 <?php
+define("QUESTIONS_COUNT", 8);
 /**
  * A data model that represents a quiz question
  */
@@ -51,11 +52,46 @@ class Question {
 		$this->correct = $correct;
 	}
 	
-	public static function fetch() {
+	public static function fetch($type) {
+		$database = GlobalDatabase::$instance;
+		$fetchSql = "SELECT * FROM questions WHERE type = ?";
+		$res = $database->query($fetchSql, array($type));
 		
+		$questionsArray = array();
+		
+		while($row = $res->fetch()) {
+			$q = new Question(-1, "", "", array(), "");
+			$q->id = $row->id % QUESTIONS_COUNT;
+			$q->text = $row->text;
+			$q->type = $type;
+			
+			// get the answers
+			$answersSql = "SELECT * FROM answers WHERE question_id = ?";
+			$answersRes = $database->query($answersSql, array((int) $row->id));
+			
+			$answers = array();
+			while($answerRow = $answersRes->fetch()) {
+				$answers[$answerRow->text] = $answerRow->letter;
+				if((int)$answerRow->correct === 1) {
+					$q->correct = $answerRow->letter;
+				}
+			}
+			$q->answers = $answers;
+			
+			$questionsArray[] = $q;
+		}
+		return $questionsArray;
 	}
 	
 	public static function create($questionObject) {
-		require_once("../config/db_config.php");
+		require_once("config/db_config.php");
+		$questionSql = "INSERT INTO questions (text, type) VALUES (?, ?)";
+		$database->exec($questionSql, array($questionObject->text, $questionObject->type));
+		$insertedId = $database->lastInsertId();
+		
+		foreach($questionObject->answers as $letter => $answer) {
+			$answerSql = "INSERT INTO answers(question_id, text, letter, correct) VALUES(?, ?, ?, ?)";
+			$database->exec($answerSql, array($insertedId, $answer, $letter, ($letter === $questionObject->correct ? 1 : 0)));
+		}
 	}
 }
