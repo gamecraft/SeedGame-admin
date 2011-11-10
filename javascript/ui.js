@@ -35,21 +35,27 @@ Seed.Game.UI = {
 		this.startId++;
 	},
 	submitQuizes : function() {
-		var validFlag = true;
-		var payLoad = {
+		var validFlag = true, payLoad = {
 			data : {
 				identificaton : "",
 				quizes : [
 				// {type : "Cloud", answers : "abcdfs"}
 				]
 			}
-		};
+		}, notifier = Seed.Game.Notifier;
 
 		$.each($("#quizContent").children(), function(index, item) {
 			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".types").val();
-
+			
+			// answers validation, we don't want to flood the sever with shit
 			if(givenAnswers.length !== 8) {
-				$().toastmessage('showWarningToast', "8 answers must be given, only {0} available".format(givenAnswers.length));
+				notifier.warning("8 answers must be given, only {0} available".format(givenAnswers.length));
+				validFlag = false;
+				return validFlag;
+			}
+			
+			if(givenAnswers.match(/[^a-d]/)) {
+				notifier.warning("Answers must be in the range of a to d");
 				validFlag = false;
 				return validFlag;
 			}
@@ -65,7 +71,6 @@ Seed.Game.UI = {
 		}
 		payLoad.data.identificaton = $("#userAutocomplete").val();
 		console.log(payLoad);
-		//payLoad = JSON.stringify(payLoad);
 		$.ajax({
 			type : "POST",
 			url : Seed.Game.Server.getEvalURL(),

@@ -15,6 +15,7 @@ require_once ("class_loader.php");
 		<script src="javascript/ui.js"></script>
 		<script src="javascript/api.js"></script>
 		<script src="javascript/server.js"></script>
+		<script src="javascript/notifier.js"></script>
 	</head>
 	<body>
 		
