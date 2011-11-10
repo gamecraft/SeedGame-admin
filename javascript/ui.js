@@ -14,7 +14,7 @@ Seed.Game.UI = (function() {
 			}, function(event) {
 				event.data.context.addQuizAnswerField();
 			});
-			
+
 			$("#evaluateButton").bind("click", {
 				context : this
 			}, this.submitQuizes);
@@ -69,7 +69,8 @@ Seed.Game.UI = (function() {
 					// {type : "Cloud", answers : "abcdfs"}
 					]
 				}
-			};
+			}, userId = null;
+
 			$.each($("#quizContent").children(), function(index, item) {
 				var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".types").val();
 				$(item).removeClass("warning");
@@ -97,13 +98,18 @@ Seed.Game.UI = (function() {
 				}
 				payLoad.data.quizes.push(quiz);
 			});
+			userId = $("#userId").val();
+			
+			if(parseInt(userId) === -1) {
+				validFlag = false;
+				self.notifier.warning("No name selected");
+			}
 			// do not call ajax
 			if(validFlag === false) {
 				return;
 			}
 
-			payLoad.data.identificaton = $("#userAutocomplete").val();
-			
+			payLoad.data.identificaton = userId;
 			$.ajax({
 				type : "POST",
 				url : Seed.Game.Server.getEvalURL(),
@@ -113,14 +119,9 @@ Seed.Game.UI = (function() {
 					data = JSON.parse(data);
 					var points = data.data.score + data.data.bonus, dataPayload = {
 						points : points
-					}, userId = $("#userId").val();
+					};
 
-					if(parseInt(userId) === -1) {
-						self.notifier.warning("No name selected");
-						return;
-					}
-
-					Seed.Game.API.helperMethod(Seed.Game.Server.API.TeamMember, userId, Seed.Game.Server.API.Helper.ADD_POINTS, dataPayload, "Points added");
+					Seed.Game.API.helperMethod(Seed.Game.Server.API.TeamMember, data.data.identification, Seed.Game.Server.API.Helper.ADD_POINTS, dataPayload, "Points added");
 				},
 				error : function(jqXHR, textStatus, errorThrown) {
 					console.log(textStatus + ' ' + errorThrown);
