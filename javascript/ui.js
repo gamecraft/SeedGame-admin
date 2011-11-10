@@ -20,13 +20,22 @@ Seed.Game.UI = {
 		}).render(data);
 	},
 	loadIdentifications : function() {
+		this.idMap = {};
+		console.log(this);
+		var idMap = this.idMap;
 		Seed.Game.API.get(Seed.Game.Server.API.TeamMember, "IDs fetched", function(data) {
 			var parsed = [];
+
 			for(var i = 0, len = data.data.length; i < len; ++i) {
 				parsed[i] = data.data[i].name;
+				idMap[data.data[i].name] = data.data[i]._id;
 			}
+
 			$("#userAutocomplete").autocomplete({
-				source : parsed
+				source : parsed,
+				select : function(event, item) {
+					$("#userId").val(Seed.Game.UI.idMap[item.item.value]);
+				}
 			});
 		});
 	},
@@ -97,6 +106,12 @@ Seed.Game.UI = {
 			data : payLoad,
 			success : function(data) {
 				console.log(data);
+				data = JSON.parse(data);
+				var points = data.data.score + data.data.bonus, dataPayload = {
+					points : points
+				}, userId = $("#userId").val();
+
+				Seed.Game.API.helperMethod(Seed.Game.Server.API.TeamMember, userId, Seed.Game.Server.API.Helper.ADD_POINTS, dataPayload, "Points added");
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
 				console.log(textStatus + ' ' + errorThrown);

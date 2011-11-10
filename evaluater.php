@@ -104,6 +104,7 @@ foreach($payload["quizes"] as $quiz) {
 $bonus = determineBonus($submitetTypes);
 
 $returnedValue = array("data" => array(
+	"identificaton" => $payload["identificaton"],
 	"score" => $payloadScore,
 	"bonus" => $bonus));
 
