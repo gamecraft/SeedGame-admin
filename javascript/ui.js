@@ -5,18 +5,30 @@ Seed.Game.UI = {
 
 	init : function() {
 		this.addQuizAnswerField();
+		this.loadIdentifications();
+
 		$("#addAnotherQuiz").bind("click", {
 			context : this
 		}, function(event) {
 			event.data.context.addQuizAnswerField();
 		});
-
 		$("#evaluateButton").click(this.submitQuizes);
 	},
 	loadTemplate : function(path, data) {
 		return new EJS({
 			url : path
 		}).render(data);
+	},
+	loadIdentifications : function() {
+		Seed.Game.API.get(Seed.Game.Server.API.TeamMember, "IDs fetched", function(data) {
+			var parsed = [];
+			for(var i = 0, len = data.data.length; i < len; ++i) {
+				parsed[i] = data.data[i].name;
+			}
+			$("#userAutocomplete").autocomplete({
+				source : parsed
+			});
+		});
 	},
 	addQuizAnswerField : function() {
 		var html = this.loadTemplate("javascript/templates/" + "quizAnswersUIMarkup.ejs", {
@@ -45,11 +57,10 @@ Seed.Game.UI = {
 		}, notifier = Seed.Game.Notifier;
 
 		$.each($("#quizContent").children(), function(index, item) {
-			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(),
-			givenType = $(item).children(".types").val();
-			
+			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".types").val();
+
 			$(item).removeClass("warning");
-			
+
 			// answers validation, we don't want to flood the sever with shit
 			if(givenAnswers.length !== 8) {
 				notifier.warning("8 answers must be given, only {0} available".format(givenAnswers.length));
@@ -60,7 +71,7 @@ Seed.Game.UI = {
 				notifier.warning("Answers must be in the range of a to d");
 				validFlag = false;
 			}
-			
+
 			// paint it with red border
 			if(validFlag === false) {
 				$(item).addClass("warning");
@@ -73,7 +84,6 @@ Seed.Game.UI = {
 			}
 			payLoad.data.quizes.push(quiz);
 		});
-		
 		// do not call ajax
 		if(validFlag === false) {
 			return;

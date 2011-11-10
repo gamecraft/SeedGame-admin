@@ -1,4 +1,5 @@
 <?php
+header("Content-Type: text/html; charset=utf-8");
 require_once ("class_loader.php");
 ?>
 <!DOCTYPE html>
@@ -7,6 +8,10 @@ require_once ("class_loader.php");
 		<title>Quiz Admin</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="javascript/plugins/jquery-ui-1.8.16.custom.min.js"></script>
+		<link href="javascript/plugins/smoothness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+		
+		
 		<script src="javascript/plugins/jquery.toastmessage.js"></script>
 		<link href="javascript/plugins/jquery.toastmessage.css" rel="stylesheet" />
 		<script src="javascript/plugins/ejs_production.js"></script>
@@ -16,6 +21,7 @@ require_once ("class_loader.php");
 		<script src="javascript/api.js"></script>
 		<script src="javascript/server.js"></script>
 		<script src="javascript/notifier.js"></script>
+		<link href="styles/ui.css" rel="stylesheet" />
 	</head>
 	<body>
 		
