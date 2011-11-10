@@ -14,6 +14,7 @@ require_once ("class_loader.php");
 		<script src="javascript/main.js"></script>
 		<script src="javascript/ui.js"></script>
 		<script src="javascript/api.js"></script>
+		<script src="javascript/server.js"></script>
 	</head>
 	<body>
 		

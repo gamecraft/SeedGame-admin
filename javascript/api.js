@@ -26,7 +26,7 @@ Seed.Game.API = (function() {
 			// make the call
 			$.ajax({
 				type : "POST",
-				url : Server.URL + apiObjectName,
+				url : Seed.Game.Server.getURL() + apiObjectName,
 				data : dataObject,
 				dataType : "json",
 				contentType : "application/json; charset=utf-8",
@@ -52,7 +52,7 @@ Seed.Game.API = (function() {
 
 			$.ajax({
 				type : "GET",
-				url : Server.URL + apiObjectName,
+				url : Seed.Game.Server.getURL() + apiObjectName,
 				dataType : "json",
 				success : function(data) {
 					_private.successToast(successToastMessage);
@@ -72,7 +72,7 @@ Seed.Game.API = (function() {
 
 			$.ajax({
 				type : "GET",
-				url : Server.URL + apiObjectName + "/" + apiObjectId,
+				url : Seed.Game.Server.getURL() + apiObjectName + "/" + apiObjectId,
 				dataType : "json",
 				success : function(data) {
 					_private.successToast(successToastMessage);
@@ -92,7 +92,7 @@ Seed.Game.API = (function() {
 			dataObject = JSON.stringify(dataObject);
 			$.ajax({
 				type : "PUT",
-				url : Server.URL + apiObjectName + "/" + apiObjectId,
+				url : Seed.Game.Server.getURL() + apiObjectName + "/" + apiObjectId,
 				dataType : "json",
 				contentType : "application/json; charset=utf-8",
 				data : dataObject,

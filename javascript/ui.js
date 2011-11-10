@@ -7,7 +7,7 @@ Seed.Game.UI = {
 		this.addQuizAnswerField();
 		$("#addAnotherQuiz").bind("click", {
 			context : this
-		}, function(event){
+		}, function(event) {
 			event.data.context.addQuizAnswerField();
 		});
 
@@ -35,9 +35,35 @@ Seed.Game.UI = {
 		this.startId++;
 	},
 	submitQuizes : function() {
-		$.each($("#quizContent").children(), function(index, item){
-			console.log($(item).children(".answers").val());
-			console.log($(item).children(".types").val());
+		var validFlag = true;
+		var payLoad = {
+			identificaton : "",
+			quizes : [
+			// {type : "Cloud", answers : "abcdfs"}
+			]
+		};
+
+		$.each($("#quizContent").children(), function(index, item) {
+			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".answers").val();
+
+			if(givenAnswers.length !== 8) {
+				$().toastmessage('showWarningToast', "8 answers must be given, only {0} available".format(givenAnswers.length));
+				validFlag = false;
+				return validFlag;
+			}
+
+			var quiz = {
+				type : givenAnswers,
+				answers : givenType
+			}
+			payLoad.quizes.push(quiz);
 		});
+		
+		if(validFlag === false) {
+			return;
+		}
+		payLoad.identificaton = $("#userAutocomplete").val();
+		console.log(payLoad);
+
 	}
 }
