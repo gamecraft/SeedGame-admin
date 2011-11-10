@@ -45,19 +45,26 @@ Seed.Game.UI = {
 		}, notifier = Seed.Game.Notifier;
 
 		$.each($("#quizContent").children(), function(index, item) {
-			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".types").val();
+			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(),
+			givenType = $(item).children(".types").val();
+			
+			$(item).removeClass("warning");
 			
 			// answers validation, we don't want to flood the sever with shit
 			if(givenAnswers.length !== 8) {
 				notifier.warning("8 answers must be given, only {0} available".format(givenAnswers.length));
 				validFlag = false;
-				return validFlag;
 			}
-			
+
 			if(givenAnswers.match(/[^a-d]/)) {
 				notifier.warning("Answers must be in the range of a to d");
 				validFlag = false;
-				return validFlag;
+			}
+			
+			// paint it with red border
+			if(validFlag === false) {
+				$(item).addClass("warning");
+				return false;
 			}
 
 			var quiz = {
@@ -66,9 +73,12 @@ Seed.Game.UI = {
 			}
 			payLoad.data.quizes.push(quiz);
 		});
+		
+		// do not call ajax
 		if(validFlag === false) {
 			return;
 		}
+
 		payLoad.data.identificaton = $("#userAutocomplete").val();
 		console.log(payLoad);
 		$.ajax({

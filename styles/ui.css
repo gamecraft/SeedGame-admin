@@ -1,0 +1,9 @@
+.warning {
+	border-style : solid;
+	border-width: 1px;
+	border-color : red;
+}
+
+.answerField {
+	margin : 10px;
+}
