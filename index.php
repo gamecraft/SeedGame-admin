@@ -31,7 +31,7 @@ require_once ("class_loader.php");
 		<input type="button" value="Add another quiz" id="addAnotherQuiz" />
 		<br />
 		Identification : <input type="text" id="userAutocomplete" />
-		<input type="hidden" id="userId" />
+		<input type="hidden" id="userId" value="-1" />
 		<br />
 		<input type="button" value="Evaluate" id="evaluateButton" />
 	</body>
