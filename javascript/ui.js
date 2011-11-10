@@ -2,7 +2,12 @@ namespace("Seed.Game.UI");
 
 Seed.Game.UI = (function() {
 	var _private = {
-		startId : 1
+		startId : 1,
+		loadTemplate : function(path, data) {
+			return new EJS({
+				url : path
+			}).render(data);
+		}
 	}
 	return {
 		init : function() {
@@ -12,7 +17,7 @@ Seed.Game.UI = (function() {
 			$("#addAnotherQuiz").bind("click", {
 				context : this
 			}, function(event) {
-				event.data.context.addQuizAnswerField();
+				event.data.context.addQuizAnswerField(event);
 			});
 
 			$("#evaluateButton").bind("click", {
@@ -20,11 +25,6 @@ Seed.Game.UI = (function() {
 			}, this.submitQuizes);
 
 			this.notifier = Seed.Game.Notifier;
-		},
-		loadTemplate : function(path, data) {
-			return new EJS({
-				url : path
-			}).render(data);
 		},
 		loadIdentifications : function() {
 			this.idMap = {};
@@ -45,8 +45,12 @@ Seed.Game.UI = (function() {
 				});
 			});
 		},
-		addQuizAnswerField : function() {
-			var html = this.loadTemplate("javascript/templates/" + "quizAnswersUIMarkup.ejs", {
+		addQuizAnswerField : function(event) {
+			console.log(this);
+			if(_private.startId >= 3) {
+				this.notifier.sticky().notice("Attention! Only the first three will be evaluated by the backend");
+			}
+			var html = _private.loadTemplate("javascript/templates/" + "quizAnswersUIMarkup.ejs", {
 				quizId : "quiz" + _private.startId
 			});
 			$("#quizContent").append(html);
@@ -75,6 +79,9 @@ Seed.Game.UI = (function() {
 				var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".types").val();
 				$(item).removeClass("warning");
 
+				/*
+				* START OF VALIDATION SECTOR
+				*/
 				// answers validation, we don't want to flood the sever with shit
 				if(givenAnswers.length !== 8) {
 					self.notifier.warning("8 answers must be given, only {0} available".format(givenAnswers.length));
@@ -99,7 +106,7 @@ Seed.Game.UI = (function() {
 				payLoad.data.quizes.push(quiz);
 			});
 			userId = $("#userId").val();
-			
+
 			if(parseInt(userId) === -1) {
 				validFlag = false;
 				self.notifier.warning("No name selected");
@@ -108,7 +115,10 @@ Seed.Game.UI = (function() {
 			if(validFlag === false) {
 				return;
 			}
-
+			/*
+			 * END OF VALIDATION SECTOR
+			 */
+			
 			payLoad.data.identificaton = userId;
 			$.ajax({
 				type : "POST",
