@@ -34,5 +34,7 @@ require_once ("class_loader.php");
 		<input type="hidden" id="userId" value="-1" />
 		<br />
 		<input type="button" value="Evaluate" id="evaluateButton" />
+		<hr />
+		Teams evaluation
 	</body>
 </html>

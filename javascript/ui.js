@@ -3,13 +3,15 @@ namespace("Seed.Game.UI");
 Seed.Game.UI = (function() {
 	var _private = {
 		startId : 1,
+		answerFieldCount : 1
+	}
+
+	return {
 		loadTemplate : function(path, data) {
 			return new EJS({
 				url : path
 			}).render(data);
-		}
-	}
-	return {
+		},
 		init : function() {
 			this.addQuizAnswerField();
 			this.loadIdentifications();
@@ -46,23 +48,28 @@ Seed.Game.UI = (function() {
 			});
 		},
 		addQuizAnswerField : function(event) {
-			console.log(this);
-			if(_private.startId >= 3) {
+			if(_private.answerFieldCount >= 3) {
 				this.notifier.sticky().notice("Attention! Only the first three will be evaluated by the backend");
 			}
-			var html = _private.loadTemplate("javascript/templates/" + "quizAnswersUIMarkup.ejs", {
+			var html = this.loadTemplate("javascript/templates/" + "quizAnswersUIMarkup.ejs", {
 				quizId : "quiz" + _private.startId
 			});
 			$("#quizContent").append(html);
 
 			$("#quiz" + _private.startId).children(".removeField").bind("click", {
-				answerFieldId : "quiz" + _private.startId
+				answerFieldId : "quiz" + _private.startId,
+				context : this
 			}, function(event) {
-				$("#" + event.data.answerFieldId).remove();
-				$("#" + event.data.answerFieldId).unbind("click");
+				event.data.context.removeQuizAnswerField(event.data.answerFieldId);
 			});
 
 			_private.startId++;
+			_private.answerFieldCount++;
+		},
+		removeQuizAnswerField : function(id) {
+			_private.answerFieldCount--;
+			$("#" + id).remove();
+			$("#" + id).unbind("click");
 		},
 		submitQuizes : function(event) {
 			var self = event.data.context;
@@ -88,7 +95,7 @@ Seed.Game.UI = (function() {
 					validFlag = false;
 				}
 
-				if(givenAnswers.match(/[^a-d]/)) {
+				if(givenAnswers.match(/[^a-e]/) /*e means empty answer*/) {
 					self.notifier.warning("Answers must be in the range of a to d");
 					validFlag = false;
 				}
@@ -118,7 +125,7 @@ Seed.Game.UI = (function() {
 			/*
 			 * END OF VALIDATION SECTOR
 			 */
-			
+
 			payLoad.data.identificaton = userId;
 			$.ajax({
 				type : "POST",

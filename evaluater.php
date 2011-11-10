@@ -7,11 +7,11 @@ define("CLOUD_RIGHT_ANSWERS", "abcdbcad");
 define("SOFTWARE_RIGHT_ANSWERS", "bacbacda");
 define("ENTREPRENEUR_RIGHT_ANSWERS", "dadaaccb");
 
+define("NOT_ANSWERED_PLACEHOLDER", "e");
+
 define("CLOUD", "Cloud");
 define("ENTREPRENEUR", "Entrepreneur");
 define("SOFTWARE", "Software");
-
-// parse the POSTed JSON
 
 
 $payload = $_POST["data"];
