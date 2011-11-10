@@ -37,14 +37,16 @@ Seed.Game.UI = {
 	submitQuizes : function() {
 		var validFlag = true;
 		var payLoad = {
-			identificaton : "",
-			quizes : [
-			// {type : "Cloud", answers : "abcdfs"}
-			]
+			data : {
+				identificaton : "",
+				quizes : [
+				// {type : "Cloud", answers : "abcdfs"}
+				]
+			}
 		};
 
 		$.each($("#quizContent").children(), function(index, item) {
-			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".answers").val();
+			var givenAnswers = $(item).children(".answers").val().removeWhiteSpace(), givenType = $(item).children(".types").val();
 
 			if(givenAnswers.length !== 8) {
 				$().toastmessage('showWarningToast', "8 answers must be given, only {0} available".format(givenAnswers.length));
@@ -53,17 +55,28 @@ Seed.Game.UI = {
 			}
 
 			var quiz = {
-				type : givenAnswers,
-				answers : givenType
+				type : givenType,
+				answers : givenAnswers
 			}
-			payLoad.quizes.push(quiz);
+			payLoad.data.quizes.push(quiz);
 		});
-		
 		if(validFlag === false) {
 			return;
 		}
-		payLoad.identificaton = $("#userAutocomplete").val();
+		payLoad.data.identificaton = $("#userAutocomplete").val();
 		console.log(payLoad);
+		//payLoad = JSON.stringify(payLoad);
+		$.ajax({
+			type : "POST",
+			url : Seed.Game.Server.getEvalURL(),
+			data : payLoad,
+			success : function(data) {
+				console.log(data);
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				console.log(textStatus + ' ' + errorThrown);
+			}
+		});
 
 	}
 }
