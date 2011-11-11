@@ -42,6 +42,7 @@ Seed.Game.UI = (function() {
 				$("#userAutocomplete").autocomplete({
 					source : parsed,
 					select : function(event, item) {
+						$("#idPlaceholder").html(Seed.Game.UI.idMap[item.item.value]);
 						$("#userId").val(Seed.Game.UI.idMap[item.item.value]);
 					}
 				});

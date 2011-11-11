@@ -106,7 +106,8 @@ $bonus = determineBonus($submitetTypes);
 $returnedValue = array("data" => array(
 	"identification" => $payload["identificaton"],
 	"score" => $payloadScore,
-	"bonus" => $bonus));
+	"bonus" => $bonus),
+	"timestamp" => time());
 
 echo json_encode($returnedValue);
 

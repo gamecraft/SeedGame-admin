@@ -32,4 +32,5 @@ namespace("Seed.Game");
 $(document).ready(function() {
 	var ui = Seed.Game.UI;
 	ui.init();
+	ui.TeamVoting.init();
 });

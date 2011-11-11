@@ -18,6 +18,7 @@ require_once ("class_loader.php");
 
 		<script src="javascript/main.js"></script>
 		<script src="javascript/ui.js"></script>
+		<script src="javascript/team_voting_ui.js"></script>
 		<script src="javascript/api.js"></script>
 		<script src="javascript/server.js"></script>
 		<script src="javascript/notifier.js"></script>
@@ -30,11 +31,13 @@ require_once ("class_loader.php");
 		<br />
 		<input type="button" value="Add another quiz" id="addAnotherQuiz" />
 		<br />
-		Identification : <input type="text" id="userAutocomplete" />
+		Identification : <input type="text" id="userAutocomplete" /> <div id="idPlaceholder"></div>
 		<input type="hidden" id="userId" value="-1" />
 		<br />
 		<input type="button" value="Evaluate" id="evaluateButton" />
 		<hr />
 		Teams evaluation
+		<div id="teamVotingPlaceholder">
+		</div>
 	</body>
 </html>

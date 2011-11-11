@@ -1,0 +1,6 @@
+<% for(var i=0, len = teams.length; i < len; i++) { %>
+<div id="team<%= i %>">
+<%= teams[i].name %> : <input type="button" class="vote" value="+" />
+<div class="teamId"><%= teams[i].id %></div>
+</div>
+<% } %>
